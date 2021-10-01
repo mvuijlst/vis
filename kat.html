@@ -35,7 +35,8 @@
             return dayOfYear;
         }
 
-
+        /* PER DAY */
+        /*
         d3.csv("/kat.csv", function (logdata) {
             return {
                 y: getDOY(getDate(logdata.Start)),
@@ -60,12 +61,42 @@
                 .attr("width", (d) => d.width)
                 .attr("height", lineheight)
         });
+        */
+
+        /* PER MONTH */
+
+        d3.csv("/kat.csv", function (logdata) {
+            return {
+                y: getDate(logdata.Start).getMonth(),
+                x: getMinutes(logdata.Start),
+                width: parseInt(logdata.Duration)
+            };
+        }).then(function (data) {
+            var width = 1440; // minuten per dag
+            var lineheight = 50;
+            var height = 366 * lineheight; // dagen op een jaar
+
+            var svg = d3.select("#container")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .selectAll("rect")
+                .data(data)
+                .enter()
+                .append("rect")
+                .attr("x", (d) => d.x)
+                .attr("y", (d) => d.y * lineheight)
+                .attr("width", (d) => d.width)
+                .attr("height", lineheight)
+                .attr("opacity", .2)
+                //.attr("fill", "#0626d6")
+        });
     </script>
 </head>
 
 <body>
 
-    <div id="container">
+    <div id="container"> 
 
     </div>
 
